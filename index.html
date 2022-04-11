@@ -3,85 +3,91 @@
 <link rel="stylesheet" href="estilo.css">
 
 <html>
-    <div class="main-background">
 
-        <!--NAVBAR-->
-        <div class="navbar" >
-            <div class= "logo">$HYPECOIN</div>
-            <div class = "links">
-                <div class= "nav-link">Main</div>
-                <div class= "nav-link">Buy</div>
-                <div class= "nav-link">Sell</div>
-            </div>
-            <a class= "log-link nav-link double-size" href="#login">Login | Sign in</div>
-        </div>
-        
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Last-Modified" content="0">
+        <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+       
+        <title>HYPECOIN</title>
 
-        <!--TOKEN PRICE CONTAINER-->
-        <div class="token-price-container">
-            <div class = "hypecoin-container">
-                <img class="hypecoin-img" src="img/hypecoin.png">
-                <div class="hypecoin-price">HYPECOIN PRICE</div>
-            </div>
-            <div class="mid-bar mid-pos-prices"></div>
-            <div class = "btc-container">
-                <img class="coin-img" src="img/bitcoin.png">
-                <div class="price">BTC PRICE</div>
-            </div>
-            <div class = "eth-container">
-                <img class="coin-img" src="img/ethereum.png">
-                <div class="price">ETH PRICE</div>
-            </div>
-            <div class = "bnb-container">
-                <img class="coin-img" src="img/binance.png">
-                <div class="price">BNB PRICE</div>
-            </div>
-            <div class = "uniswap-container">
-                <img class="coin-img" src="img/uniswap.png">
-                <div class="price">UNI PRICE</div>
-            </div>
-            <div class = "polygon-container">
-                <img class="coin-img" src="img/polygon-token.png">
-                <div class="price">PLYGN PRICE</div>
-            </div>
-            <div class = "chainlink-container">
-                <img class="coin-img" src="img/chainlink.png">
-                <div class="price">LINK PRICE</div>
-            </div>
-        </div>
+        <script src="./app.js" defer></script>
+        <link rel="stylesheet" href="./estilo.css">
+    </head>
 
-        <!--BUY AND SELL CONTAINERS-->
-        <div class="buy-sell-container">
-            <div class="buy-container">
-                <div class="buy-sell-text" >You can buy tokens instantly or make a normal buy</div>
-                <div class="buy-sell-button">BUY</div>
-            </div>
-            <div class="sell-container">
-                <div class="buy-sell-text" >You can sell tokens instantly or make a normal sell</div>
-                <div class="buy-sell-button">SELL</div>
-            </div>
-        </div>
+    <body>
+        <div class="main-background">
 
-        <div class="biography-container">
-            <div class="git-container">
-                <div class="buy-sell-text" >If you click on the button you can see the memory of our TFG</div>
-                <div class="buy-sell-button">MEMORY</div>
+            <!--NAVBAR-->
+            <div class="navbar" >
+                <div class= "logo">$HYPECOIN</div>
+                <div class = "links">
+                    <a class= "nav-link" href="index.html">Main</a>
+                    <a class= "nav-link" href="buy.html">Buy</a>
+                    <a class= "nav-link" href="sell.html">Sell</a>
+                </div>
+                <button class= "log-link nav-link double-size login-button" id="open_login">Login | Sign in</button>
             </div>
-            <div class="mid-bar mid-pos-bio"></div>
-            <div class="tfg-container">
-                <div class="buy-sell-text" >If you click on the button you can see the github of the tfg</div>
-                <div class="buy-sell-button">GITHUB</div>
-            </div>
-        </div>
-
-                <!--LOGIN-->
-        <div id="login" class="modal">
-            <div class="modal-contenido">
-                <a href="#">X</a>
-                <div>Mi primer Modal</div>
-                <div>Este es mi primera ventana modal sin utilizar JavaScript.</div>
-            </div>  
-        </div>
             
-    </div>
+
+            <!--TOKEN PRICE CONTAINER-->
+            <div class="token-price-container">
+                <div class = "hypecoin-container">
+                    <img class="hypecoin-img" src="img/hypecoin.png">
+                    <div class="hypecoin-price">HYPECOIN PRICE</div>
+                </div>
+                <div class="mid-bar mid-pos-prices"></div>
+                <div class = "btc-container">
+                    <img class="coin-img" src="img/bitcoin.png">
+                    <div class="price" id="#BTC"></div>
+                </div>
+                <div class = "eth-container">
+                    <img class="coin-img" src="img/ethereum.png">
+                    <div class="price" id="#ETH"></div>
+                </div>
+                <div class = "bnb-container">
+                    <img class="coin-img" src="img/binance.png">
+                    <div class="price" id="#BNB"></div>
+                </div>
+                <div class = "uniswap-container">
+                    <img class="coin-img" src="img/uniswap.png">
+                    <div class="price" id="#UNI"></div>
+                </div>
+                <div class = "polygon-container">
+                    <img class="coin-img" src="img/polygon-token.png">
+                    <div class="price" id="#MATIC"></div>
+                </div>
+                <div class = "chainlink-container">
+                    <img class="coin-img" src="img/chainlink.png">
+                    <div class="price" id="#LINK"></div>
+                </div>
+            </div>
+
+            <!--BUY AND SELL CONTAINERS-->
+            <div class="buy-sell-container">
+                <div class="buy-container">
+                    <div class="buy-sell-text" >You can buy tokens instantly or make a normal buy</div>
+                    <a class="buy-sell-button" href="buy.html">BUY</a>
+                </div>
+                <div class="sell-container">
+                    <div class="buy-sell-text" >You can sell tokens instantly or make a normal sell</div>
+                    <a class="buy-sell-button" href="sell.html">SELL</a>
+                </div>
+            </div>
+
+            <div class="biography-container">
+                <div class="git-container">
+                    <div class="buy-sell-text" >If you click on the button you can see the memory of our TFG</div>
+                    <div class="buy-sell-button">MEMORY</div>
+                </div>
+                <div class="mid-bar mid-pos-bio"></div>
+                <div class="tfg-container">
+                    <div class="buy-sell-text" >If you click on the button you can see the github of the tfg</div>
+                    <div class="buy-sell-button">GITHUB</div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

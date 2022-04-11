@@ -2,7 +2,7 @@
     position: absolute;
     left: 0px;
     width: 100%;
-    height: 1800px;
+    height: 1720px;
     background: #cecdcd;
 }
 
@@ -36,7 +36,7 @@
 
 .log-link{
     position: absolute;
-    left: 1750px;
+    left: 1720px;
 }
 
 .nav-link{
@@ -48,6 +48,7 @@
     width: 80px;
     padding-top: 35px;
     text-align: center;
+    text-decoration: none;
 }
 
 .nav-link:hover{
@@ -64,7 +65,7 @@
     border-radius: 90px;
     width: 600px;
     height: 600px;
-    padding: 10px 20px;
+    padding: 50px 50px;
     top: 19%;
     left: 34%;
     position: absolute;
@@ -83,6 +84,11 @@
 #login:target{
     opacity:1;
     pointer-events:auto;
+}
+
+.login-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-size: 40px;
 }
 
 .token-price-container{
@@ -182,8 +188,8 @@
 .price{
     float: right;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
-    font-size: 25px;
-    padding-top: 6px;
+    font-size: 33px;
+    font-weight: 600;
 }
 
 .buy-sell-container{
@@ -191,7 +197,7 @@
     top: 700px;
     left: 100px;
     height: 500px;
-    width: 1760px;
+    width: 1720px;
     background-color: rgb(255,255,255,0.5);
     border-radius: 100px;
 }
@@ -229,10 +235,28 @@
     border-radius: 20px;
     text-align: center;
     padding-top: 25px;
+    text-decoration: none;
 }
 
 .buy-sell-button:hover{
     border-color: #000000;
+}
+
+.instant-buy-sell-button{
+    position: absolute;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-size: 30px;
+    font-weight: bolder;
+    top: 200px;
+    left: 200px;
+    height: 70px;
+    width: 200px;
+    background-color: rgb(241, 194, 50);
+    border-radius: 20px;
+    text-align: center;
+    padding-top: 7px;
+    padding-bottom: 12px;
+    text-decoration: none;
 }
 
 .buy-sell-text{
@@ -285,4 +309,13 @@
     left: 200px;
     height: 400px;
     width: 600px;
+}
+
+.login-button{
+    background-color: goldenrod;
+    border: #000000;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    top: 20px;
 }
