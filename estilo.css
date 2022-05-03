@@ -2,7 +2,7 @@
     position: absolute;
     left: 0px;
     width: 100%;
-    height: 1720px;
+    height: 1800px;
     background: #cecdcd;
 }
 
@@ -55,10 +55,6 @@
     font-weight: bolder;
 }
 
-.double-size{
-    width: 150px !important;
-}
-
 .modal-contenido{
     background-color:white;
     border: #f1c232 5px;
@@ -108,7 +104,8 @@
 .hypecoin-price{
     float: right;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
-    font-size: 40px;
+    font-size: 60px;
+    font-weight: 500;
     padding-top: 37px;
 }
 
@@ -226,8 +223,8 @@
     position: absolute;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
     font-size: 30px;
-    font-weight: bolder;
-    top: 200px;
+    font-weight: 500;
+    top: 150px;
     left: 200px;
     height: 70px;
     width: 200px;
@@ -262,9 +259,21 @@
 .buy-sell-text{
     position: absolute;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bolder;
     top: 60px;
+    left: 50px;
+    height: 100px;
+    width: 500px;
+    text-align: center;
+}
+
+.second-buy-sell-text{
+    position: absolute;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-size: 25px;
+    font-weight: bolder;
+    top: 30px;
     left: 50px;
     height: 100px;
     width: 500px;
@@ -318,4 +327,79 @@
     padding-bottom: 20px;
     padding-top: 20px;
     top: 20px;
+    left: 1680px;
+    width: 220px !important;
+}
+
+.not-login-button{
+    background-color: rgb(159 153 135);
+    border: #000000;
+    color: rgb(0,0,0);
+    border-radius: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    top: 20px;
+    left: 1630px;
+    width: 250px !important;
+}
+
+.user-wallet{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-size: 15px;
+    background-color: rgb(255, 255, 255);
+    border: #000000;
+    color:rgb(0,0,0);
+    border-radius: 26px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 25px;padding-right: 25px;position: absolute;top: 31px;
+    left: 1270px;
+}
+
+.cancel-button{
+    left: 90px !important;
+    top: 275px !important;
+}
+
+.continue-button{
+    left: 310px !important;
+    top: 275px !important;
+}
+
+.amount-input{
+    position: absolute;
+    top: 130px;
+    left: 100px;
+    height: 35px;
+    width: 365px;
+    font-size: 25px;
+    padding-left: 20px;
+    padding-right: 15px;
+    border-radius: 15px;
+}
+
+.type-input{
+    position: absolute;
+    top: 180px;
+    left: 100px;
+    height: 40px;
+    width: 406px;
+    font-size: 25px;
+    border-radius: 15px;
+    padding-left: 18px;
+}
+
+.checkbox-text{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+    font-size: 23px;
+    position: absolute;
+    top: 229px;
+    left: 220px;
+    font-weight: 500;
+}
+
+.checkbox{
+    position: absolute;
+    top: 237px;
+    left: 190px;
 }

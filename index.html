@@ -6,6 +6,7 @@
 
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
         <meta http-equiv="Expires" content="0">
         <meta http-equiv="Last-Modified" content="0">
         <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
@@ -13,8 +14,14 @@
        
         <title>HYPECOIN</title>
 
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script> 
+        <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+
         <script src="./app.js" defer></script>
         <link rel="stylesheet" href="./estilo.css">
+
     </head>
 
     <body>
@@ -23,12 +30,8 @@
             <!--NAVBAR-->
             <div class="navbar" >
                 <div class= "logo">$HYPECOIN</div>
-                <div class = "links">
-                    <a class= "nav-link" href="index.html">Main</a>
-                    <a class= "nav-link" href="buy.html">Buy</a>
-                    <a class= "nav-link" href="sell.html">Sell</a>
-                </div>
-                <button class= "log-link nav-link double-size login-button" id="open_login">Login | Sign in</button>
+                <div id="account"></div>
+                <a id="loginButton" onclick="" type="button" class= "log-link nav-link login-button">Login with Metamask</a>
             </div>
             
 
@@ -36,7 +39,7 @@
             <div class="token-price-container">
                 <div class = "hypecoin-container">
                     <img class="hypecoin-img" src="img/hypecoin.png">
-                    <div class="hypecoin-price">HYPECOIN PRICE</div>
+                    <div class="hypecoin-price" id="#HYPECOIN"></div>
                 </div>
                 <div class="mid-bar mid-pos-prices"></div>
                 <div class = "btc-container">
@@ -68,24 +71,48 @@
             <!--BUY AND SELL CONTAINERS-->
             <div class="buy-sell-container">
                 <div class="buy-container">
-                    <div class="buy-sell-text" >You can buy tokens instantly or make a normal buy</div>
-                    <a class="buy-sell-button" href="buy.html">BUY</a>
+                    
+                    <div id="buyText" class="buy-sell-text" ></div>
+                    <a onclick="toggleBuyView()" type="button" class="log-link nav-link buy-sell-button" id="buyButton">BUY</a>
+
+                    <input type="hidden" id="buyAmount" name="amount" min="1" class="amount-input">    
+                    <select id="buyType" hidden="false" class="type-input" hidden>
+                        <option>USDT</option>
+                        <option>USDC</option>
+                        <option>DAI</option>
+                        <option>UST</option>
+                        <option>USDG</option>
+                    </select>
+                    <label id = "checkbox-text" class="checkbox-text"></label> 
+                    <input type="hidden" class = "checkbox" id="checkbox" value="first_checkbox">               
+                    <a onclick="untoggleBuyView()" type="button" id="cancelBuyButton"></a>
+                    <a onclick="buy()" type="button" id="continueBuyButton"></a>
+                
                 </div>
+
                 <div class="sell-container">
-                    <div class="buy-sell-text" >You can sell tokens instantly or make a normal sell</div>
-                    <a class="buy-sell-button" href="sell.html">SELL</a>
+
+                    <div id="sellText" class="buy-sell-text" ></div>
+                    <a onclick="toggleSellView()" type="button" class="log-link nav-link buy-sell-button" id="sellButton">SELL</a>
+
+                    <input type="hidden" id="sellAmount" name="amount" min="1" class="amount-input">
+                    
+                    <a onclick="untoggleSellView()" type="button" id="cancelSellButton"></a>
+                    <a onclick="sell()" type="button" id="continueSellButton"></a>
+
                 </div>
             </div>
 
             <div class="biography-container">
                 <div class="git-container">
+
                     <div class="buy-sell-text" >If you click on the button you can see the memory of our TFG</div>
-                    <div class="buy-sell-button">MEMORY</div>
+                    <div class="buy-sell-button">DOCS</div>
                 </div>
                 <div class="mid-bar mid-pos-bio"></div>
                 <div class="tfg-container">
-                    <div class="buy-sell-text" >If you click on the button you can see the github of the tfg</div>
-                    <div class="buy-sell-button">GITHUB</div>
+                    <div class="buy-sell-text" >If you click on the button you can see the github of the TFG</div>
+                    <a class="buy-sell-button" href="https://github.com/GonzaloMartinezBerzal/HYPECOIN">GITHUB</a>
                 </div>
             </div>
         </div>
