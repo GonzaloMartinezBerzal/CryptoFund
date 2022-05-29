@@ -1,0 +1,159 @@
+{
+	"compiler": {
+		"version": "0.8.14+commit.80d49f37"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "NAV",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "coinAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "stable",
+						"type": "uint256"
+					}
+				],
+				"name": "addCoin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "coinAddr",
+						"type": "address"
+					}
+				],
+				"name": "delCoin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newAddr",
+						"type": "address"
+					}
+				],
+				"name": "deleteContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalToTransfer",
+						"type": "uint256"
+					}
+				],
+				"name": "transferFunds",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "comission",
+						"type": "uint256"
+					}
+				],
+				"name": "updateNAV",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "newNAV",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newAddr",
+						"type": "address"
+					}
+				],
+				"name": "updateProxy",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"TFGv3/Contracts/Interfaces/ISCStorage.sol": "ISCStorage"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"TFGv3/Contracts/Interfaces/ISCStorage.sol": {
+			"keccak256": "0x44fa27b592c9491dd280b6b8c0363b817cb957a52abdb27579776d4e5e083d31",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://28e367601b9c8293cbb61bb7eaf04515fa2a5eb5af002b70198ffc36e9944e0e",
+				"dweb:/ipfs/QmW3KoqMe7fyGJabsrbZzFi7yiFtffiepqq997biioCJM1"
+			]
+		}
+	},
+	"version": 1
+}

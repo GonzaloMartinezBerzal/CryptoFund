@@ -1,0 +1,317 @@
+{
+	"compiler": {
+		"version": "0.8.14+commit.80d49f37"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "fallback"
+			},
+			{
+				"inputs": [],
+				"name": "accumCommission",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "tokensToTransfer",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "qty",
+						"type": "uint256[]"
+					}
+				],
+				"name": "collectCommission",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "address[]",
+						"name": "tokensToTransfer",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "qty",
+						"type": "uint256[]"
+					}
+				],
+				"name": "deleteContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeYear",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "proxyAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastUpdated_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "accumCommission_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "feeYear_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "r_",
+						"type": "uint256"
+					}
+				],
+				"name": "initContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "initDone",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "lastUpdated",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "buyOrSell",
+						"type": "uint256"
+					}
+				],
+				"name": "payComissions",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "payedComissions",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "proxy",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "r",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newFee",
+						"type": "uint256"
+					}
+				],
+				"name": "setFeeYear",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newR",
+						"type": "uint256"
+					}
+				],
+				"name": "setR",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newAddr",
+						"type": "address"
+					}
+				],
+				"name": "updateProxy",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"TFGv3/Contracts/SCCommission.sol": "SCCommission"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 5000
+		},
+		"remappings": []
+	},
+	"sources": {
+		"TFGv3/Contracts/Interfaces/IERC20.sol": {
+			"keccak256": "0x59a03f41c93e1e60f5d0cd67af555cb474afb987990fb47dc128c74ea5a960f2",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://7de853bafd2ce286ab83b7acba0d271df56d08efafeaf050f94a7972668a8b8d",
+				"dweb:/ipfs/QmXTDrwjPT3VWQTrRE94LrbDb1yFcKEHWDbRurXBgWaXBu"
+			]
+		},
+		"TFGv3/Contracts/Interfaces/IProxy.sol": {
+			"keccak256": "0x457ec80cafbaf6e5f70cf6364557fdc497e802c3617a15966fc6c79fa995d044",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://23e2a5b5168b3235a983595e31036adf66060d62ae9e5f6d097df1b1e6559f34",
+				"dweb:/ipfs/QmajmGCZ4LhmUJL3eFh8kKRLRuR31SMUnqNbcFjeKCoQD5"
+			]
+		},
+		"TFGv3/Contracts/Interfaces/ISCCommission.sol": {
+			"keccak256": "0x9f9b9e99159eabe43404d867a64018b9b659c8eb1634603dd5ac3959536f943a",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://199b2f59b06b0a015d00136b9b6198b051183f26baf374c78462286aae037f5e",
+				"dweb:/ipfs/QmYA9CWEVqwN84CGoEwAUWi9w2R9t3xp7xfnEc9bxHwjMi"
+			]
+		},
+		"TFGv3/Contracts/Interfaces/ISCExchange.sol": {
+			"keccak256": "0x31ea8830f6820ac5dbe085226419a2ec19d0a3d12aec8148ab69cd31da5c856b",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://fbf0a05b5b50f2b9beecc7ef90eb7af924a40f2e1a248cce747d9f44284c1379",
+				"dweb:/ipfs/QmbKkQSU64e7Z31pKveJnC7jdVLnW7uaYALtbcnYiXjf7y"
+			]
+		},
+		"TFGv3/Contracts/Interfaces/ISCOps.sol": {
+			"keccak256": "0x3e4655a10df0f0cf6c011a9bb55cd9592061d2b7a6540ffbc04c8267d4513940",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://9945f611e8120c4e6a9108006e8938e2e062858de2d31c4c3cba9a3167afc971",
+				"dweb:/ipfs/Qmb7KDX9ai8RHcnFiY9cwqiFAtmvXsUMQaUr4XhZkzTm6q"
+			]
+		},
+		"TFGv3/Contracts/Interfaces/ISCStorage.sol": {
+			"keccak256": "0x44fa27b592c9491dd280b6b8c0363b817cb957a52abdb27579776d4e5e083d31",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://28e367601b9c8293cbb61bb7eaf04515fa2a5eb5af002b70198ffc36e9944e0e",
+				"dweb:/ipfs/QmW3KoqMe7fyGJabsrbZzFi7yiFtffiepqq997biioCJM1"
+			]
+		},
+		"TFGv3/Contracts/SCCommission.sol": {
+			"keccak256": "0xcb3c7291b06b0bc455a05201fbf47a93d24c9424b3da31e62801fc1e55b533b8",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://bbebca67e28187a2be2157b5eba3355badab546988b2793ec0cc65a23caf6e81",
+				"dweb:/ipfs/QmSW2MaXSykCbeEn2CxRpiHT4V4ZBZyXUPBuRiGd9yhwkU"
+			]
+		}
+	},
+	"version": 1
+}
