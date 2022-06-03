@@ -403,3 +403,13 @@
     top: 237px;
     left: 190px;
 }
+
+.ok-wrong-button{
+    left: 200px !important;
+    top: 230px !important;
+}
+
+.ok-wrong-text{
+    left: 50px !important;
+    top: 100px !important;
+}

@@ -27,13 +27,20 @@ var buyType = document.getElementById('buyType');
 var checkbox = document.getElementById('checkbox');
 var checkboxText = document.getElementById('checkbox-text');
 
+var okWrongBuyText = document.getElementById('okWrongBuyText');
+var okWrongBuyButton = document.getElementById('okWrongBuyButton');
+
+var okWrongSellText = document.getElementById('okWrongSellText');
+var okWrongSellButton = document.getElementById('okWrongSellButton');
+
 var signer;
-var contractAdress;
 var contract;
 
-//const oracleProvider = new ethers.providers.EtherscanProvider();
-//const oracleSigner = new ethers.Wallet("26440592acf000d58c919893729cfabd49a4cf41c359fac89b23203bcdd8b37a", oracleProvider); // address = 0x7bDEed0aBf825F3ee2856515DDB6E4aF433EF869
-//const oracleContract = new ethers.Contract(contractAdress, ["function oracleNAV() external view returns (uint, uint)"], oracleSigner);
+const oracleProvider = new ethers.providers.EtherscanProvider("goerli", "8IA398I1CXWT1279TM2NR2HV7RHYSYFBKC");
+const oracleSigner = new ethers.Wallet("0ae7838fa77cb74c3ee71330ce92102b09b55de6542f8fcfe042db3e9f0f103e", oracleProvider); // address = 0x7bDEed0aBf825F3ee2856515DDB6E4aF433EF869
+const oracleContract = new ethers.Contract("0x8c9d4f7c8509278B71807d1843a84bA03B0BC70C", ["function oracleNAV() external view returns (uint, uint)"], oracleSigner);
+const CFT = new ethers.Contract("0x4eEfd60042dd22E773962B7CEe5eAeE17Cc9DcfE", ["function totalSupply() external view returns (uint)"], oracleSigner);
+
 
 var web3;
 
@@ -61,7 +68,7 @@ async function loginWithMetaMask(){
     signer = provider.getSigner();
     const account = await signer.getAddress();
 
-    //contract = new ethers.Contract(contractAdress, ["function buyTokensOutput(address stableAddr, uint tokensOut) external","function buyTokensInput(address stableAddr, uint qtyIn) external", "function sellTokens(uint qty) external"], signer);
+    contract = new ethers.Contract("0x6c709cD772256F5aaDc88856aDE1483Fe898a779", ["function buyTokensOutput(address stableAddr, uint tokensOut) external","function buyTokensInput(address stableAddr, uint qtyIn) external", "function sellTokens(uint qty) external"], signer);
 
     if (!account) { return; }
 
@@ -105,11 +112,12 @@ function getPrices(){
   }
 
 async function getHypecoinPrice(){
-  //var price = await contract.oracleNAV(); 
-  //var daily = ((1 + 0.05)**(1/365));
-  //var timeEllapsed = (Date.now() - price[1])/1000/3600/24;
-  //var hypecoinPrice = price[0] * (1 - daily)**timeEllapsed;
-  priceHYPECOIN.innerText = 0 + '$';
+  var price = await oracleContract.oracleNAV(); 
+
+  var timeEllapsed = (Date.now() - Number(price[1])*1000);
+  var hypecoinPrice = ((Number(price[0])/1e18) * (1 - timeEllapsed * 0.00000000000158548959918823));
+  var totalSupply = await CFT.totalSupply();
+  priceHYPECOIN.innerText = (hypecoinPrice / totalSupply).toFixed(4) + '$';
 }
 
 function toggleBuyView(){
@@ -129,6 +137,7 @@ function toggleBuyView(){
 
   continueBuyButton.innerText = 'CONTINUE';
   cancelBuyButton.innerText = 'CANCEL'; 
+
 }
 
 function toggleSellView(){
@@ -145,6 +154,7 @@ function toggleSellView(){
 
   continueSellButton.innerText = 'CONTINUE';
   cancelSellButton.innerText = 'CANCEL'; 
+
 }
 
 function untoggleBuyView(){
@@ -163,6 +173,7 @@ function untoggleBuyView(){
   cancelBuyButton.classList = '';
   continueBuyButton.innerText = '';
   cancelBuyButton.innerText = ''; 
+ 
 }
 
 function untoggleSellView(){
@@ -178,70 +189,94 @@ function untoggleSellView(){
   cancelSellButton.classList = '';
   continueSellButton.innerText = '';
   cancelSellButton.innerText = ''; 
+
+}
+
+function okWrongBuytoggle(text){
+  
+  buyAmount.type = 'hidden';
+  buyType.hidden = true;
+  checkbox.type = 'hidden';
+  checkboxText.innerText = '';
+
+  continueBuyButton.classList = '';
+  continueBuyButton.innerText = '';
+
+  buyText.classList = 'second-buy-sell-text ok-wrong-text'
+  cancelBuyButton.classList = 'log-link nav-link buy-sell-button ok-wrong-button';
+  buyText.innerText = text;
+  cancelBuyButton.innerText = 'CONTINUE';
+}
+
+function okWrongSelltoggle(text){
+  sellAmount.type = 'hidden';
+
+  sellText.classList = 'second-buy-sell-text ok-wrong-text'
+  continueSellButton.classList = '';
+  continueSellButton.innerText = '';
+
+  sellText.innerText = text;
+  cancelSellButton.classList = 'log-link nav-link buy-sell-button ok-wrong-button';
+  cancelSellButton.innerText = 'CONTINUE';
 }
 
 async function buy(){
-  var tx;
-  var tokenaddress = 0x0000000000000000000000000000000000000000;
-  //comprobar checkbox
-  if(checkbox.checked){
 
-    switch (buyType) {
+  var tx;
+
+  if(!checkbox.checked){
+
+    switch (buyType.value) {
       case "USDT":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
+        tx = await contract.buyTokensOutput("0xa186048793D8d7039a2EBB3cbbcbA616A2BCE2bA", BigInt(buyAmount.value), {gasLimit: 250000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
       break;
       case "USDC":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
+        tx = await contract.buyTokensOutput("0x2a1b0C2628450155F4607642C13F4E9b9c73c413",  BigInt(buyAmount.value), {gasLimit: 250000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
       break;
       case "DAI":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
+        tx = await contract.buyTokensOutput("0xC8f1bA43f7FCa150660a2540C7c31bbA4F633C69",  BigInt(buyAmount.value), {gasLimit: 250000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
       break;
-      case "UST":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
-      break;
+      
     }
   }
   else{
-
-    switch (buyType) {
+    var bigBuyAmount;
+    switch (buyType.value) {
       case "USDT":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
+        bigBuyAmount = BigInt(buyAmount.value) * 1000000n;
+        tx = await contract.buyTokensInput("0xa186048793D8d7039a2EBB3cbbcbA616A2BCE2bA", bigBuyAmount , {gasLimit: 250000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
       break;
       case "USDC":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
+        bigBuyAmount = BigInt(buyAmount.value) * 1000000n;
+        tx = await contract.buyTokensInput("0x2a1b0C2628450155F4607642C13F4E9b9c73c413", bigBuyAmount, {gasLimit: 250000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
       break;
       case "DAI":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
+        bigBuyAmount = BigInt(buyAmount.value) * 1000000000000000000n;
+        tx = await contract.buyTokensInput("0xC8f1bA43f7FCa150660a2540C7c31bbA4F633C69",bigBuyAmount , {gasLimit: 250000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
       break;
-      case "UST":
-        tx = await contract.buyTokensOutput(tokenaddress, buyAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
-      break;
+
     }
   }
-  console.log(tx);
 
   try {
     await tx.wait();
-    console.log("Bien"); 
+    okWrongBuytoggle("Transaction has been succesful") 
   } catch(error) {
-    console.log("Mal");
+    okWrongBuytoggle("Something went wrong") 
   }
     
 }
 
 async function sell(){
   var tx;
-  var tokenaddress = 0x0000000000000000000000000000000000000000;
-
-  await contract.sellTokens(tokenaddress, sellAmount.innerText); // tokenaddress es una direccion distinta dependiendo del token
-
-  console.log(tx);
+  var bigSellAmount = BigInt(sellAmount.value);
+  tx = await contract.sellTokens( bigSellAmount, {gasLimit: 450000, gasPrice: 5e9}); // tokenaddress es una direccion distinta dependiendo del token
 
   try {
     await tx.wait();
-    console.log("Bien"); 
+      okWrongSelltoggle("Transaction has been succesful") 
   } catch(error) {
-    console.log("Mal");
+      okWrongSelltoggle("Something went wrong") 
   }
 
 }

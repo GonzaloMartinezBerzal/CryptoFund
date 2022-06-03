@@ -10,7 +10,7 @@ interface ISCStorage
 
     function transferFunds(address to, uint totalToTransfer) external returns (bool);
 
-    function addCoin(address coinAddr, uint stable) external;
+    function addCoin(address coinAddr, bool stable) external;
 
     function delCoin(address coinAddr) external;
 

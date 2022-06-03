@@ -11,7 +11,7 @@ contract SCStorage is ISCStorage
 	
 	uint public NAV;
     uint8 public initDone;
-    uint8 nStable;
+    uint8 public nStable;
 	
     address public proxy;
 
@@ -28,13 +28,13 @@ contract SCStorage is ISCStorage
     
 	modifier OnlyDeployer()
     {
-        require(msg.sender == deployer);
+        require(msg.sender == deployer, "Sender is not Deployer");
         _;
     }
 
     modifier NonInit()
     {
-        require(initDone == 0);
+        require(initDone == 0, "Contract non-init");
         _;
     }
 
@@ -46,7 +46,7 @@ contract SCStorage is ISCStorage
 
     function updateNAV(uint comission) external virtual override returns (uint newNAV)
     {
-        require(msg.sender == IProxy(proxy).exchangeContract());
+        require(msg.sender == IProxy(proxy).exchangeContract(), "Sender is not SCExchange");
         newNAV = calculateNAV() - comission;
         NAV = newNAV;
     }
@@ -54,7 +54,7 @@ contract SCStorage is ISCStorage
     function transferFunds(address to, uint totalToTransfer) external virtual override returns (bool)
     {
         address proxyAddr = proxy;
-        require(msg.sender == IProxy(proxyAddr).exchangeContract() || msg.sender == IProxy(proxyAddr).commissionContract());
+        require(msg.sender == IProxy(proxyAddr).exchangeContract() || msg.sender == IProxy(proxyAddr).commissionContract(), "Sender is not SCExchange or SCCommission");
         uint n = coinArray.length;
         
         for(uint i = 0; i < n; i++)
@@ -63,7 +63,7 @@ contract SCStorage is ISCStorage
             if(coins[coinAddr] == 2)
             {
                 uint8 decimals = IERC20(coinAddr).decimals();
-                if(decimals < 18) IERC20(coinAddr).transfer(to, totalToTransfer/nStable/10**(uint(decimals)-18));
+                if(decimals < 18) IERC20(coinAddr).transfer(to, totalToTransfer/nStable/10**(18-uint(decimals)));
                 else if(decimals == 18) IERC20(coinAddr).transfer(to, totalToTransfer/nStable);
             }
         }
@@ -87,35 +87,43 @@ contract SCStorage is ISCStorage
         {
             address coin = coinArray[i];
             uint balance = IERC20(coin).balanceOf(address(this));
+            uint decimals = uint(IERC20(coin).decimals());
             uint stable = coins[coin];
             
             if(stable == 1)
             {
                 uint quote;
                 unchecked{
-                    (int24 arithmeticMeanTick,) = OracleLibrary.consult(coinOracleAddr[coin], 0);
+                    (int24 arithmeticMeanTick,) = OracleLibrary.consult(coinOracleAddr[coin], 1);
                     quote = OracleLibrary.getQuoteAtTick(arithmeticMeanTick, uint128(balance), coin, quoteIn[coin]);
+                    uint quotedInDecimals = uint(IERC20(quoteIn[coin]).decimals());
+                    if(quotedInDecimals < 18) quote*10**(18-quotedInDecimals);
                 }
-                newNAV += balance * quote;
+                newNAV += quote;
             }
-            else if(stable == 2) newNAV += balance;
+            else if(stable == 2)
+            {
+                if (decimals < 18) newNAV += balance*10**(18-decimals);
+                else newNAV += balance;
+            }
         }
     }
     
-    function addCoin(address coinAddr, uint stable) external  OnlyDeployer
+    function addCoin(address coinAddr, bool stable) external OnlyDeployer
     {
-        if(stable == 0) coins[coinAddr] = 1;
-        else if(stable == 1)
+        if(!stable)coins[coinAddr] = 1;
+        else
         {
             coins[coinAddr] = 2;
             nStable++;
         }
         coinArray.push(coinAddr);
+        IERC20(coinAddr).approve(IProxy(proxy).opsContract(), type(uint256).max);
     }
     
     function delCoin(address coinAddr) external
     {
-        require(msg.sender == deployer || msg.sender == IProxy(proxy).exchangeContract());
+        require(msg.sender == deployer || msg.sender == IProxy(proxy).exchangeContract(), "Sender is not Deployer or SCExchange");
         if(coins[coinAddr] == 2) nStable--;
         coins[coinAddr] = 0;
         uint n = coinArray.length;
@@ -125,13 +133,21 @@ contract SCStorage is ISCStorage
             {
                 coinArray[i] = coinArray[n-1];
                 coinArray.pop();
+                break;
             }
         }
+        IERC20(coinAddr).approve(IProxy(proxy).opsContract(), 0);
+    }
+
+    function setOracle(address coin, address v3Pool, address quotedIn) external OnlyDeployer
+    {
+        coinOracleAddr[coin] = v3Pool;
+        quoteIn[coin] = quotedIn;
     }
 
     function updateProxy(address newAddr) external virtual override
     {
-        require(msg.sender == proxy);
+        require(msg.sender == proxy, "Sender is not Proxy");
         proxy = newAddr;
     }
     
@@ -139,7 +155,7 @@ contract SCStorage is ISCStorage
     {
         address proxyAddr = proxy;
         IProxy(proxyAddr).setStorageAddr(newAddr);
-        newAddr.delegatecall(abi.encodeWithSignature("initContract(address)", proxyAddr));
+        //newAddr.delegatecall(abi.encodeWithSignature("initContract(address)", proxyAddr));
         uint n = coinArray.length;
         for(uint i = 0; i < n; i++)
         {

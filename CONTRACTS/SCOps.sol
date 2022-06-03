@@ -10,9 +10,6 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Callee.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./libraries/UniswapV2Library.sol";
 
-//curve.fi 3pool interface
-//import './I3Pool.sol';
-
 contract SCOps is ISCOps
 {
 	address immutable deployer;
@@ -20,7 +17,6 @@ contract SCOps is ISCOps
     uint8 public initDone;
 
     address public v2factory;
-    //address public curvePoolAddr;
     
     constructor()
     {
@@ -29,13 +25,13 @@ contract SCOps is ISCOps
     
 	modifier OnlyDeployer()
     {
-        require(msg.sender == deployer);
+        require(msg.sender == deployer, "Sender not Deployer");
         _;
     }
 
     modifier NonInit()
     {
-        require(initDone == 0);
+        require(initDone == 0, "Contract non-initiated");
         _;
     }
 
@@ -50,14 +46,10 @@ contract SCOps is ISCOps
         v2factory = factory;
     }
 
-    /*function setCurvePool(address pool) external OnlyOwner
-    {
-        curvePoolAddr = pool;
-    }*/
-
     function uniSwap(address[] calldata path, uint amount) external virtual override OnlyDeployer
     {
         address factory = v2factory;
+        address proxyAddr = proxy;
         uint qtyIn = amount;
         for(uint i = 0; i < path.length-1; i++)
         {
@@ -71,37 +63,31 @@ contract SCOps is ISCOps
             {
                 amount0Out = 0;
                 amount1Out = UniswapV2Library.getAmountOut(qtyIn, aReserves, bReserves);
+                IERC20(path[i]).transferFrom(IProxy(proxyAddr).storageContract(), inputPair, qtyIn);
                 qtyIn = amount1Out;
-                IERC20(path[i]).transfer(inputPair, qtyIn);
             }
             else
             {
-                amount0Out = UniswapV2Library.getAmountOut(qtyIn, bReserves, aReserves);
+                amount0Out = UniswapV2Library.getAmountOut(qtyIn, aReserves, bReserves);
                 amount1Out = 0;
+                IERC20(path[i]).transferFrom(IProxy(proxyAddr).storageContract(), inputPair, qtyIn);
                 qtyIn = amount0Out;
-                IERC20(path[i+1]).transfer(inputPair, qtyIn);
             }
             IUniswapV2Pair(inputPair).swap(amount0Out, amount1Out, IProxy(proxy).storageContract(), "");
         }
     }
     
-    /*function curveSwap(int128 curveCoinIn, int128 curveCoinOut, uint amount) external virtual override OnlyDeployer
-    {
-
-    }*/
-    
     function updateProxy(address newAddr) external virtual override OnlyDeployer
     {
-        require(msg.sender == proxy);
+        require(msg.sender == proxy, "Sender not Proxy");
         proxy = newAddr;
     }
     
     function deleteContract(address newContract) external virtual override OnlyDeployer
     {
-        //Hacer selfdestruct con todas las ops cerradas si hubiese alguna abierta
         address proxyAddr = proxy;
         IProxy(proxyAddr).setOpsAddr(newContract);
-        newContract.delegatecall(abi.encodeWithSignature("initContract(address)", proxyAddr));
+        //newContract.delegatecall(abi.encodeWithSignature("initContract(address)", proxyAddr));
         selfdestruct(payable(deployer));
     }
     

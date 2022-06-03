@@ -4,7 +4,7 @@ pragma solidity >= 0.8.0;
 
 import "./Interfaces/IProxy.sol";
 
-contract CryptoFundToken is IERC20
+contract ERC20 is IERC20
 {
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
@@ -24,6 +24,7 @@ contract CryptoFundToken is IERC20
         symbol = symbol_;
         decimals = decimals_;
         deployer = msg.sender;
+        _owner = msg.sender;
     }
 
     modifier OnlyDeployer()
@@ -147,7 +148,7 @@ contract CryptoFundToken is IERC20
 
     function _spendAllowance(address owner, address spender, uint256 amount) internal virtual
     {
-        uint256 currentAllowance = _allowances[owner][spender];
+        uint256 currentAllowance = _allowances[msg.sender][spender];
         if (currentAllowance != type(uint256).max)
         {
             require(currentAllowance >= amount, "ERC20: insufficient allowance");

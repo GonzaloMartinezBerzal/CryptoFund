@@ -22,31 +22,31 @@ contract SCExchange is ISCExchange
     
 	modifier OnlyDeployer()
     {
-        require(msg.sender == deployer);
+        require(msg.sender == deployer, "Sender not Deployer");
         _;
     }
 
     modifier Blacklisted()
     {
-    	require(blacklist[msg.sender] != 1);
+    	require(blacklist[msg.sender] != 1, "Account Blacklisted");
     	_;
     }
 
     modifier Coin(address stableAddr)
     {
-    	require(coins[stableAddr] == 1);
+    	require(coins[stableAddr] == 1, "Coin is not added");
     	_;
     }
     
     modifier Locked()
     {
-        require(lock == 0);
+        require(lock == 0, "Contract locked");
         _;
     }
 
     modifier NonInit()
     {
-        require(initDone == 0);
+        require(initDone == 0, "Contract non-initiated");
         _;
     }
     
@@ -69,20 +69,21 @@ contract SCExchange is ISCExchange
 
     function buyTokensOutput(address stableAddr, uint tokensOut) external virtual override Blacklisted Locked Coin(stableAddr)
     {
+        require(tokensOut > 0, "Output must be GT0");
         address proxyAddr = proxy;
         address storageAddr = IProxy(proxyAddr).storageContract();
         
         uint NAVvalue = ISCStorage(storageAddr).updateNAV(ISCCommission(IProxy(proxyAddr).commissionContract()).payComissions(0)); //0 si es buy
     	
         uint payment;
-        uint tokenDecimals = IERC20(stableAddr).decimals();
+        uint tokenDecimals = uint(IERC20(stableAddr).decimals());
         uint tokenSupply = IERC20(IProxy(proxyAddr).token()).totalSupply();
     	
         if(tokenDecimals < 18) //Decimales del NAV
     	{
             if(tokenSupply == 0 && NAVvalue == 0)
             {
-                payment = tokensOut * tokenDecimals;
+                payment = tokensOut * 10**tokenDecimals;
             }
     	    else payment = tokensOut * (NAVvalue / tokenSupply) / 10**(18 - tokenDecimals);
     	}
@@ -91,20 +92,20 @@ contract SCExchange is ISCExchange
             if(tokenSupply == 0 || NAVvalue == 0) payment = tokensOut * 1e18;
             else payment = tokensOut * (NAVvalue / tokenSupply);
         }
-        require(IERC20(stableAddr).transferFrom(msg.sender, storageAddr, payment));
-        require(IERC20(IProxy(proxyAddr).token()).mint(msg.sender, tokensOut));
+        require(IERC20(stableAddr).transferFrom(msg.sender, storageAddr, payment), "TransferFrom failed");
+        require(IERC20(IProxy(proxyAddr).token()).mint(msg.sender, tokensOut), "Mint failed");
     }
     
     function buyTokensInput(address stableAddr, uint qtyIn) external virtual override Blacklisted Locked Coin(stableAddr)
     {
-        require(qtyIn > 0);
+        require(qtyIn > 0, "Input must be GT0");
         address proxyAddr = proxy;
         address storageAddr = IProxy(proxyAddr).storageContract();
 
         uint NAVvalue = ISCStorage(storageAddr).updateNAV(ISCCommission(IProxy(proxyAddr).commissionContract()).payComissions(0)); //0 si es buy
         
         uint payment;
-        uint tokenDecimals = IERC20(stableAddr).decimals();
+        uint tokenDecimals = uint(IERC20(stableAddr).decimals());
         uint tokenSupply = IERC20(IProxy(proxyAddr).token()).totalSupply();
         uint tokensOut;
 
@@ -120,7 +121,7 @@ contract SCExchange is ISCExchange
     	    else 
             {
                 tokensOut = qtyWithDec / (NAVvalue / tokenSupply);
-                payment = (tokensOut * NAVvalue / tokenSupply) / 10**(18 - tokenDecimals) + 1;
+                payment = tokensOut * (NAVvalue / tokenSupply) / 10**(18 - tokenDecimals);
             }
         }
 
@@ -137,8 +138,8 @@ contract SCExchange is ISCExchange
                 payment = tokensOut * (NAVvalue/tokenSupply);
             }
         }
-    	require(IERC20(stableAddr).transferFrom(msg.sender, storageAddr, payment));
-    	require(IERC20(IProxy(proxyAddr).token()).mint(msg.sender, tokensOut));
+    	require(IERC20(stableAddr).transferFrom(msg.sender, storageAddr, payment), "TransferFrom failed");
+    	require(IERC20(IProxy(proxyAddr).token()).mint(msg.sender, tokensOut), "Mint failed");
     }
 
 	function sellTokens(uint qty) external virtual override Blacklisted Locked
@@ -146,15 +147,14 @@ contract SCExchange is ISCExchange
         address proxyAddr = proxy;
         address storageAddr = IProxy(proxyAddr).storageContract();
         address tokenAddr = IProxy(proxyAddr).token();
-        
-        require(IERC20(tokenAddr).burnFrom(msg.sender, qty));
     	
         uint NAVvalue = ISCStorage(storageAddr).updateNAV(ISCCommission(IProxy(proxyAddr).commissionContract()).payComissions(1)); //1 si es sell
 
         uint supply = IERC20(tokenAddr).totalSupply();
         uint totalToTransfer = qty * (NAVvalue / supply);
 
-        require(ISCStorage(storageAddr).transferFunds(msg.sender, totalToTransfer));
+        require(IERC20(tokenAddr).burnFrom(msg.sender, qty), "BurnFrom failed");
+        require(ISCStorage(storageAddr).transferFunds(msg.sender, totalToTransfer), "TransferFunds failed");
     }
 
     function addCoin(address coinAddr) external  OnlyDeployer
@@ -181,7 +181,7 @@ contract SCExchange is ISCExchange
     
     function updateProxy(address newAddr) external virtual override OnlyDeployer
     {
-        require(msg.sender == proxy);
+        require(msg.sender == proxy, "Sender not Proxy");
         proxy = newAddr;
     }
     
@@ -189,8 +189,8 @@ contract SCExchange is ISCExchange
     {
         address proxyAddr = proxy;
         IProxy(proxyAddr).setExchangeAddr(newAddr);
-        newAddr.delegatecall(abi.encodeWithSignature("initContract(address)", proxyAddr));
-        address(IProxy(proxyAddr).token()).delegatecall(abi.encodeWithSignature("setOwner(address)", newAddr));
+        //newAddr.delegatecall(abi.encodeWithSignature("initContract(address)", proxyAddr));
+        //address(IProxy(proxyAddr).token()).delegatecall(abi.encodeWithSignature("setOwner(address)", newAddr));
         selfdestruct(payable(deployer));
     }
     

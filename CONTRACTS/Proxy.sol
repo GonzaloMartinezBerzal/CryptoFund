@@ -22,13 +22,13 @@ contract Proxy is IProxy
 
     modifier OnlyOwner()
     {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Sender not owner");
         _;
     }
 
     function multicall(bytes[] calldata data, address[] calldata contractAddr) external virtual override returns (bytes[] memory results)
     {
-        for(uint i = 0; i < contractAddr.length; i++) require(trustedContracts[contractAddr[i]] == 1);
+        for(uint i = 0; i < contractAddr.length; i++) require(trustedContracts[contractAddr[i]] == 1, "Contract not trusted");
         //https://ethereum.stackexchange.com/questions/83528/how-can-i-get-the-revert-reason-of-a-call-in-solidity-so-that-i-can-use-it-in-th/83577#83577
         results = new bytes[](data.length);
         for(uint i = 0; i < data.length; i++)
@@ -61,7 +61,7 @@ contract Proxy is IProxy
     function setExchangeAddr(address exchangeAddr) external
     {
         address oldExchangeAddr = exchangeContract;
-        require(msg.sender == oldExchangeAddr);
+        require(msg.sender == oldExchangeAddr, "Sender not old SCExchange");
         trustedContracts[oldExchangeAddr] = 0;
         exchangeContract = exchangeAddr;
         trustedContracts[exchangeAddr] = 1;
@@ -70,7 +70,7 @@ contract Proxy is IProxy
     function setStorageAddr(address storageAddr) external
     {
         address oldStorageAddr = storageContract;
-        require(msg.sender == oldStorageAddr);
+        require(msg.sender == oldStorageAddr, "Sender not old SCStorage");
         trustedContracts[oldStorageAddr] = 0;
         storageContract = storageAddr;
         trustedContracts[storageAddr] = 1;
@@ -79,7 +79,7 @@ contract Proxy is IProxy
     function setCommissionAddr(address commissionAddr) external
     {
         address oldCommissionAddr = commissionContract;
-        require(msg.sender == oldCommissionAddr);
+        require(msg.sender == oldCommissionAddr, "Sender not old SCCommission");
         trustedContracts[oldCommissionAddr] = 0;
         commissionContract = commissionAddr;
         trustedContracts[commissionAddr] = 1;
@@ -88,7 +88,7 @@ contract Proxy is IProxy
     function setOpsAddr(address opsAddr) external
     {
         address oldOpsAddr = opsContract;
-        require(msg.sender == oldOpsAddr);
+        require(msg.sender == oldOpsAddr, "Sender not old SCOps");
         trustedContracts[oldOpsAddr] = 0;
         opsContract = opsAddr;
         trustedContracts[opsAddr] = 1;
@@ -97,7 +97,7 @@ contract Proxy is IProxy
     function setTokenAddr(address tokenAddr) external
     {
         address oldTokenAddr = token;
-        require(msg.sender == oldTokenAddr);
+        require(msg.sender == oldTokenAddr, "Sender not old Token");
         trustedContracts[oldTokenAddr] = 0;
         token = tokenAddr;
         trustedContracts[tokenAddr] = 1;
@@ -105,14 +105,12 @@ contract Proxy is IProxy
 
     function deleteContract(address newAddr) external virtual override OnlyOwner
     {
-        (address exchangeC, address storageC, address commissionC, address opsC, address tokenC) = (exchangeContract, storageContract, commissionContract, opsContract, token);
-        newAddr.delegatecall(abi.encodeWithSignature("initAddrs(address,address,address,address,address)", exchangeC, storageC, commissionC, opsC, tokenC));
-
-        exchangeContract = address(0);
-        storageContract = address(0); 
-        commissionContract = address(0); 
-        opsContract = address(0);
-        token = address(0);
+        //(address exchangeC, address storageC, address commissionC, address opsC, address tokenC) = (exchangeContract, storageContract, commissionContract, opsContract, token);
+        //newAddr.delegatecall(abi.encodeWithSignature("initAddrs(address,address,address,address,address)", exchangeC, storageC, commissionC, opsC, tokenC));
+        ISCCommission(commissionContract).updateProxy(newAddr);
+        ISCExchange(exchangeContract).updateProxy(newAddr);
+        ISCOps(opsContract).updateProxy(newAddr);
+        ISCStorage(storageContract).updateProxy(newAddr);
         selfdestruct(payable(owner));
     }
 

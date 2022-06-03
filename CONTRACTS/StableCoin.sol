@@ -4,13 +4,12 @@ pragma solidity >= 0.8.0;
 
 import "./Interfaces/IProxy.sol";
 
-contract CryptoFundToken is IERC20
+contract StableCoin is IERC20
 {
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
 
     address immutable deployer;
-    address private _owner;
 
     uint256 public _totalSupply;
 
@@ -30,17 +29,6 @@ contract CryptoFundToken is IERC20
     {
         require(msg.sender == deployer, "Sender not deployer");
         _;
-    }
-
-    modifier OnlyOwners()
-    {
-        require(msg.sender == _owner || msg.sender == deployer, "Sender not owner");
-        _;
-    }
-
-    function setOwner(address newOwner) external OnlyDeployer
-    {
-        _owner = newOwner;
     }
 
     function totalSupply() external view virtual override returns (uint256)
@@ -160,7 +148,7 @@ contract CryptoFundToken is IERC20
 
 //--------------------------------------------------------------------------------------------------------------//
     
-    function mint(address account, uint amount) external virtual override OnlyOwners returns (bool)
+    function mint(address account, uint amount) external virtual override OnlyDeployer returns (bool)
     {
         _mint(account, amount);
         return true;
