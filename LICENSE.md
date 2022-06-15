@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022 Gonzalo Martínez Berzal
+Copyright (c) 2022 Gonzalo Martínez Berzal, Muad Rohaibini, Ismail Azizi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
